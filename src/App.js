@@ -1,25 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+//import logo from "./logo.svg";
+import "./App.css";
+import { Switch, Route } from "react-router-dom";
+import { HomePage, GamePage, SettingsPage } from "./pages";
+import { symbols } from "./constants";
+import { createDeck, shuffle } from "./utilities";
+
+//react fragments to wrap content <></> eg the <div>
+const allCards = symbols.concat(symbols);
 
 function App() {
+  const createNewDeck = () => createDeck(shuffle(allCards));
+  const [deck, setDeck] = useState(createDeck(symbols.concat(symbols)));
+  const onReset = () => setDeck(createNewDeck());
+  const onClick = (e) => {
+    const clickedCard = +e.target.dataset.number;
+    setDeck(
+      deck.map((card, i) =>
+        i !== clickedCard ? card : { ...card, flipped: !card.flipped }
+      )
+    );
+  };
+
+  //game is passed as a child of route
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Switch>
+      <Route path="/" exact component={HomePage} />
+      <Route path="/game" exact>
+        <GamePage deck={deck} onClick={onClick} onReset={onReset} />
+      </Route>
+      <Route path="/settings" component={SettingsPage} />
+    </Switch>
   );
 }
 

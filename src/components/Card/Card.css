@@ -1,0 +1,11 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 10vmin;
+  min-height: 10vmin;
+  font-size: 4vmin;
+  border: 1px solid black;
+  margin: 1vmin;
+  border-radius: 0.5vmin;
+  text-align: center;
+}
